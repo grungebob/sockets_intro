@@ -9,7 +9,7 @@ io.on('connection', socket => {
     if(username) users[socket.id] = username;
   })
   socket.on('chat message', (username, msg) => {
-    io.emit('chatMessage', {username, msg})
+    io.sockets.in(socket.room).emit('chatMessage', {username, msg});
   })
   socket.on('userDisconnect', username  => {
     if(username)io.emit('chatMessage', {username, msg: ' has connected'}); 
@@ -20,6 +20,13 @@ io.on('connection', socket => {
   })
 
   socket.on('pingServer', console.log)
+
+  socket.on('join room', (data) => {
+    console.log('joining room ', data.room);
+    socket.room = data.room;
+    socket.join(data.room);
+  })
+
 });
 
 http.listen(3000, function(){

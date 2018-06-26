@@ -22,6 +22,14 @@
         Username must have at least 4 characters and only contain alphanumeric characters
       </p>
   </div>
+  <div v-if="!roomSet">
+    <input id="room" @keyup.enter="setRoomNum" v-model="roomNum"
+      type="number"
+      placeholder="pick a room number"/>
+      <p v-if="badroomNum">
+        pick a single digit num 1 - 9
+      </p>
+  </div>
 </div>
 </template>
 
@@ -41,6 +49,9 @@ export default {
       usernameSet: false,
       typing: {},
       badUsername: false,
+      roomNumSet: false,
+      badRoomNum: false,
+      room: 0,
     };
   },
   sockets: {
@@ -81,6 +92,16 @@ export default {
         this.$socket.emit('userConnect', this.username);
       } else {
         this.badUsername = true;
+      }
+    },
+    setRoomNum() {
+      if (this.roomNum >= 0 && this.roomNum <= 9) {
+        console.log('Joining room: ', this.roomNum);
+        this.room = this.roomNum;
+        this.usernameSet = true;
+        this.$socket.emit('join room', { room: this.roomNum });
+      } else {
+        this.badRoomNum = true;
       }
     },
     isTyping() {
