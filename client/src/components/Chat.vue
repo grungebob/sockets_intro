@@ -25,7 +25,7 @@
   <div v-if="!roomSet">
     <input id="room" @keyup.enter="setRoomNum" v-model="roomNum"
       type="number"
-      placeholder="pick a room number"/>
+      placeholder="pick a room number 1 - 9"/>
       <p v-if="badroomNum">
         pick a single digit num 1 - 9
       </p>
